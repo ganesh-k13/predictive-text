@@ -64,7 +64,6 @@ class MarkovChain:
 		return random.sample(next_possible, 1)
 		
 if __name__ == '__main__':
-	to_predict = []
 	parser = argparse.ArgumentParser(description = 'usage %prog ' + '-m<model>/-d<dataset> -n<n-gram> ')
 	parser.add_argument('-d', dest='dataset', type = str, action = 'store', help='Dataset to train')
 	parser.add_argument('-f', dest='data_file', type = str, action = 'store', help='Text file to train')
