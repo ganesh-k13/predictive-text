@@ -5,6 +5,7 @@ import json
 import argparse
 # import nltk
 from store import *
+from file_process import FileHandle
 
 class MarkovChain:
 
@@ -62,6 +63,13 @@ class MarkovChain:
 			next_possible = self.memory.keys()
 
 		return random.sample(next_possible, 1)
+	
+	def learn_from_text(self):
+		p = FileHandle(options.data_file, options.n)
+		for ngrams in p.get_n_grams():
+			for ngram in ngrams:
+				self.ngrams.append(ngram)
+		self.to_store(self.ngrams)
 		
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description = 'usage %prog ' + '-m<model>/-d<dataset> -n<n-gram> ')
@@ -73,7 +81,11 @@ if __name__ == '__main__':
 	
 	options = parser.parse_args()
 	
-	if(options.dataset != None):
+	if(options.data_file != None):
+		m = MarkovChain(options.dataset, options.data_file, options.n)
+		m.learn_from_text()
+		
+	elif(options.dataset != None):
 		m = MarkovChain(options.model, options.dataset, options.n)
 		m.process_file()
 	elif(options.model != None):
