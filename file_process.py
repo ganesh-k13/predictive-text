@@ -7,15 +7,16 @@ class FileHandle():
 		self.file = file_name
 		self.n = n
 		self.translation = str.maketrans("","", string.punctuation);
+	
 	def get_input(self):
 		with open(self.file, 'rb') as f:
 			words = f.readlines()
 		
 		for w in words:
-			if(len(w) < 30):
+			if(len(w) < 1):
 				continue
-			new = str(w)[1:].translate(self.translation);
-			yield new.lower().split()[:-1]
+			new = str(w).translate(self.translation);
+			yield new.lower().split()
 	
 	def get_n_grams(self):
 		for w in self.get_input():
