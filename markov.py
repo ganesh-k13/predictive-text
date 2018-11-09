@@ -31,13 +31,17 @@ class MarkovChain:
 			raise NotImplementedError("%d-gram not implemented"%self.n)
 	
 	def process_file(self, ret=False):
+		n_grams = 0
 		with open(self.file, 'r', encoding = "ISO-8859-1") as f:
-			for line in f:
+			for i, line in enumerate(f):
+				print('Processing line: %d....'%i)
 				self.ngrams.append(line.split())
+				n_grams+=1
 				
 		if(ret):
 			return
 		# print(self.ngrams)
+		print('Adding %d %d-grams to Database....'%(n_grams, self.n))
 		self.to_store(self.ngrams)
 	
 	def __learn_key(self, *key, value):
@@ -124,7 +128,7 @@ class MarkovChain:
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description = 'usage %prog ' + '-m<model>/-d<dataset> -n<n-gram> ')
-	parser.add_argument('-w', dest='dataset', type = str, action = 'store', help='Weights to train')
+	parser.add_argument('-w', dest='dataset', type = str, action = 'store', help='Weights to train[DEPRECATED]/Use model instead')
 	parser.add_argument('-f', dest='data_file', type = str, action = 'store', help='Text file to train/test')
 	parser.add_argument('--test', action='store_true')
 	parser.add_argument('--train', action='store_true')
@@ -141,9 +145,15 @@ if __name__ == '__main__':
 		# m = MarkovChain(options.model, options.data_file, options.n)
 		# print(m.validate())
 	
-	# if(options.train):
-		# m = MarkovChain(options.dataset, options.data_file, options.n)
-		# m.learn_from_text()
+	if(options.train and options.coca):
+		# python3 markov.py -m database/w3.db -f dataset/w3_small.txt -n 3 --train --coca
+		m = MarkovChain(options.model, options.data_file, options.n)
+		m.process_file()
+		exit(0)
+	
+	if(options.train):
+		m = MarkovChain(options.model, options.data_file, options.n)
+		m.learn_from_text()
 		
 	# elif(options.coca):
 		# m = MarkovChain(options.dataset, options.data_file, options.n)
@@ -157,18 +167,18 @@ if __name__ == '__main__':
 		# print(parser.usage)
 		# exit(0)
 	if(options.predict != [] and options.test):
-		# python3 markov.py -w database/w3_small.db -n 3 --test --coca --predict a baby
-		m = MarkovChain(options.dataset, n =options.n)
+		# python3 markov.py -m database/w3_.db -f dataset/big/w3_.txt -n 3 --train --coca
+		m = MarkovChain(options.model, n =options.n)
 		pprint(m.query(*(options.predict[0])))
 	if(options.predict != [] and options.words != None):
-		#python3 markov.py -w database/big/w3.db -n 3 -words 100 --predict are you
-		m = MarkovChain(options.dataset, n = options.n)
+		# python3 markov.py -m database/w3_.db -n 3 -words 1 --predict how are
+		m = MarkovChain(options.model, n = options.n)
 		# pprint(m.query(*(options.predict[0])))
 		ngram = options.predict[0]
 		for i in range(options.words):
 			# print(ngram)
 			try:
-				res = m.query(*ngram).keys()
+				res = m.query(*ngram).keys() # Actual Result
 				print(res)
 				word = list(res)[random.randint(0, 2)]
 				print(word, end = ' ')
