@@ -76,8 +76,8 @@ class Bigram(SQLiteStore):
 			)
 			''')
 
-	def add_many(self, bigrams):
-		bigrams = [(bigram[0] or '', bigram[1] or '')
+	def add_many(self, bigrams, count = None):
+		bigrams = [(int(bigram[0]), bigram[1] or '',bigram[2] or '')
 					for bigram in bigrams]
 
 		with self.connection:
@@ -85,11 +85,11 @@ class Bigram(SQLiteStore):
 				'''INSERT OR IGNORE INTO markov_model
 				(word_1, word_2) VALUES (?, ?)
 				''',
-				bigrams
+				list(map(lambda x: x[1:], bigrams))
 			)
 			self.connection.executemany(
 				'''UPDATE markov_model
-				SET count = count + 1
+				SET count = ?
 				WHERE word_1 = ? AND word_2 = ?
 				''',
 				bigrams
@@ -131,19 +131,19 @@ class Trigram(SQLiteStore):
 			''')
 
 	def add_many(self, trigrams):
-		trigrams = [(trigram[0] or '', trigram[1] or '', trigram[2] or '')
+		trigrams = [(int(trigram[0]), trigram[1] or '', trigram[2] or '',trigram[3] or '')
 					for trigram in trigrams]
-
+		# print(trigrams)
 		with self.connection:
 			self.connection.executemany(
 				'''INSERT OR IGNORE INTO markov_model
 				(word_1, word_2, word_3) VALUES (?, ?, ?)
 				''',
-				trigrams
+				list(map(lambda x: x[1:], trigrams))
 			)
 			self.connection.executemany(
 				'''UPDATE markov_model
-				SET count = count + 1
+				SET count = ?
 				WHERE word_1 = ? AND word_2 = ? AND word_3 = ?
 				''',
 				trigrams
@@ -159,13 +159,13 @@ class Trigram(SQLiteStore):
 		)
 
 		value_dict = collections.OrderedDict()
-
+		# print('call')
 		for row in query:
 			value_dict[row[0] or None] = row[1]
 
 		if not value_dict:
 			raise KeyError()
-
+		
 		return value_dict
 
 class Fourgram(SQLiteStore):
@@ -184,8 +184,8 @@ class Fourgram(SQLiteStore):
 			)
 			''')
 
-	def add_many(self, fourgrams):
-		fourgrams = [(fourgram[0] or '', fourgram[1] or '', fourgram[2] or '', fourgram[3] or '')
+	def add_many(self, fourgrams, count = None):
+		fourgrams = [(int(fourgram[0]) , fourgram[1] or '', fourgram[2] or '', fourgram[3] or '', fourgram[4] or '')
 					for fourgram in fourgrams]
 
 		with self.connection:
@@ -193,11 +193,11 @@ class Fourgram(SQLiteStore):
 				'''INSERT OR IGNORE INTO markov_model
 				(word_1, word_2, word_3, word_4) VALUES (?, ?, ?, ?)
 				''',
-				fourgrams
+				list(map(lambda x: x[1:], fourgrams))
 			)
 			self.connection.executemany(
 				'''UPDATE markov_model
-				SET count = count + 1
+				SET count = ?
 				WHERE word_1 = ? AND word_2 = ? AND word_3 = ? AND word_4 = ?
 				''',
 				fourgrams
@@ -239,8 +239,8 @@ class Fivegram(SQLiteStore):
 			)
 			''')
 
-	def add_many(self, fivegrams):
-		fivegrams = [(fivegram[0] or '', fivegram[1] or '', fivegram[2] or '', fivegram[3] or '', fivegram[4] or '')
+	def add_many(self, fivegrams, count = None):
+		fivegrams = [(fivegram[0], fivegram[1] or '', fivegram[2] or '', fivegram[3] or '', fivegram[4] or '', fivegram[5] or '')
 					for fivegram in fivegrams]
 
 		with self.connection:
@@ -248,11 +248,11 @@ class Fivegram(SQLiteStore):
 				'''INSERT OR IGNORE INTO markov_model
 				(word_1, word_2, word_3, word_4, word_5) VALUES (?, ?, ?, ?, ?)
 				''',
-				fivegrams
+				list(map(lambda x: x[1:], fivegrams))
 			)
 			self.connection.executemany(
 				'''UPDATE markov_model
-				SET count = count + 1
+				SET count = ?
 				WHERE word_1 = ? AND word_2 = ? AND word_3 = ? AND word_4 = ? AND word_5 = ?
 				''',
 				fivegrams

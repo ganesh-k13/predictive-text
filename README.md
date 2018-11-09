@@ -5,27 +5,36 @@ Predictive Text using Markov Chain and ngram model.
 ### Prerequisites
 
 * Python version 3.5.2 or higher
-
-### Installing [TODO]
-
-First compile the project on your local system by:
-
-```
-make clean
-make
-```
-For testing if it works, see Running tests below
+* [Coca Dataset](https://www.ngrams.info/download_coca.asp)
 
 ## Running [TODO][TMP]
 
 ``` 
-python3 markov.py [PARAMETERS]...
+usage: markov.py [-h] [-w DATASET] [-f DATA_FILE] [--test] [--train] [--coca]
+                 [-m MODEL] [-n N] [-words WORDS]
+                 [--predict [PREDICT [PREDICT ...]]]
 
-PARAMETERS:
-    [Path/to/dataset] [n]
-    
+usage %prog -m<model>/-d<dataset> -n<n-gram>
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -w DATASET            Weights to train
+  -f DATA_FILE          Text file to train/test
+  --test
+  --train
+  --coca
+  -m MODEL              Trained model
+  -n N                  N in N-gram
+  -words WORDS          Next n words to generate
+  --predict [PREDICT [PREDICT ...]]    
+
 EXAMPLE:
-	python3 markov.py dataset/big/w3_.txt 3
+	# Download non-case sensitive w3_.zip from here: https://www.ngrams.info/download_coca.asp
+	# Try small first:
+	python3 markov.py -m database/w3_small.db -f dataset/w3_small.txt -n 3 --train --coca
+	# If It works:
+	python3 markov.py -m database/w3_.db -f dataset/w3_.txt -n 3 --train --coca # Add w3_.txt to dataset folder
+	python3 markov.py -m database/w3_.db -n 3 -words 1 --predict how are 
 ```
 
 ## Built With
@@ -36,7 +45,7 @@ EXAMPLE:
 
 * **Daniel I** - [danny311296](https://github.com/danny311296)
 * **Durga Akhil Mundroy** - [akhilmd](https://github.com/akhilmd)
-* **Ganesh K.** - [DarkFate13](https://github.com/DarkFate13)
+* **Ganesh K.** - [ganesh-k13](https://github.com/ganesh-k13)
 * **Rahul R Bharadwaj** - [Rahul-RB](https://github.com/Rahul-RB)
 
 
