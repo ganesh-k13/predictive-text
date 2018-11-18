@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template
 import subprocess
 import os
-from markov import MarkovChain
+from predictive_text.markov import MarkovChain
 import random
 
 app = Flask(__name__)

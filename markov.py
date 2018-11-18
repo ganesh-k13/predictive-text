@@ -4,8 +4,8 @@ import sys
 import json
 import argparse
 # import nltk
-from store import *
-from file_process import FileHandle
+from predictive_text.store import *
+from predictive_text.file_process import FileHandle
 
 class MarkovChain:
 
