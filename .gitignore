@@ -107,4 +107,3 @@ venv.bak/
 # Other
 tmp/*
 *.db
-*.txt
