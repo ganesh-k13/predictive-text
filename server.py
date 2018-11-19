@@ -1,10 +1,13 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 import subprocess
 import os
 from markov import MarkovChain
 import random
+from flask_cors import CORS, cross_origin
+
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def index():
@@ -23,8 +26,9 @@ def handle_data():
 	print(res)
 	# word = list(res)[random.randint(0, 2)]
 	# print(word, end = ' ')
-
-	return str(dict(zip(["predict1", "predict2", "predict3"], list(res)[:3])))
+	response = jsonify(dict(zip(["predict1", "predict2", "predict3"], list(res)[:3])))
+	response.headers.add('Access-Control-Allow-Origin', '*')
+	return response
     
 if(__name__ == '__main__'):
     app.run(debug=True)
